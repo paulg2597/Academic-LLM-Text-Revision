@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+
+# Application Specific State & Data
+session.json
+settings.json
+.autosave/
+
+# User Documents
+*.docx
+*.xlsx
+
+# Temporary/Cache Files
+.streamlit/
+mistral_cost.txt
+all_models.txt
+mistral.txt
