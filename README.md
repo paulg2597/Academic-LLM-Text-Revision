@@ -22,7 +22,7 @@ To run this application locally, you will need Python 3.9+ installed on your sys
    - **For advanced users:**
      ```bash
      git clone https://github.com/paulg2597/Academic-LLM-Text-Revision.git
-     cd llm-text-editor
+     cd Academic-LLM-Text-Revision
      ```
 
 2. **Create a virtual environment (Recommended):**
