@@ -21,7 +21,7 @@ To run this application locally, you will need Python 3.9+ installed on your sys
    - **For beginners:** Click the green `<> Code` button at the top of this GitHub page and select **Download ZIP**. Extract the folder to your computer and open it in your terminal/command prompt.
    - **For advanced users:**
      ```bash
-     git clone https://github.com/paulg2597/llm-text-editor.git
+     git clone https://github.com/paulg2597/Academic-LLM-Text-Revision.git
      cd llm-text-editor
      ```
 
