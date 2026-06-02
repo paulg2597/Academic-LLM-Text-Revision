@@ -143,6 +143,11 @@ def load_document(file, report_file=None):
     st.session_state.style_guidelines = []
     st.session_state.resume_idx = 0
     
+    if "loaded_sentences" in st.session_state:
+        del st.session_state["loaded_sentences"]
+    if "loaded_mapping" in st.session_state:
+        del st.session_state["loaded_mapping"]
+    
     if report_file is not None:
         try:
             df = pd.read_excel(report_file)
@@ -161,10 +166,16 @@ def load_document(file, report_file=None):
             mapping = []
             
             for i, row in enumerate(history_data):
-                all_sents.append(str(row.get("Original", "")))
+                orig = row.get("Original", "")
+                action_val = row.get("Action", "")
+                if pd.isna(orig) and pd.isna(action_val):
+                    continue
+                    
+                orig_str = "" if pd.isna(orig) else str(orig)
+                all_sents.append(orig_str)
                 
                 # Check for perfect mapping in new reports
-                if "Paragraph Index" in row:
+                if "Paragraph Index" in row and pd.notna(row["Paragraph Index"]):
                     mapping.append(int(row["Paragraph Index"]))
                 
                 action = str(row.get("Action", ""))
@@ -202,11 +213,13 @@ def load_document(file, report_file=None):
             st.session_state.loaded_mapping = mapping
             
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             st.error(f"Error loading report: {e}")
             st.session_state.step = 0
 
 def start_revision():
-    if getattr(st.session_state, "loaded_sentences", None) is not None:
+    if "loaded_sentences" in st.session_state:
         sents = st.session_state.loaded_sentences
         mapping = st.session_state.loaded_mapping
     else:
@@ -217,7 +230,7 @@ def start_revision():
     st.session_state.sentence_mapping = mapping
     st.session_state.word_count = sum(len(s.split()) for s in sents)
     
-    if getattr(st.session_state, "resume_idx", 0) > 0:
+    if st.session_state.get("resume_idx", 0) > 0:
         st.session_state.current_index = st.session_state.resume_idx
         
     st.session_state.step = 2
