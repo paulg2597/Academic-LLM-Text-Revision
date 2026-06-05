@@ -110,7 +110,7 @@ if "sentences" not in st.session_state:
 def get_context(mode, current_idx):
     if current_idx == 0:
         return ""
-    finalized = [item["Final"] for item in st.session_state.history]
+    finalized = [str(item.get("Final", "")) for item in st.session_state.history]
     if mode == "Full History":
         return " ".join(finalized)
     elif mode == "Fixed 3-Sentence":
@@ -120,7 +120,7 @@ def get_context(mode, current_idx):
         context_sentences = []
         for i, item in enumerate(st.session_state.history):
             if st.session_state.sentence_mapping[i] >= curr_p_idx - 1:
-                context_sentences.append(item["Final"])
+                context_sentences.append(str(item.get("Final", "")))
         return " ".join(context_sentences)
     return ""
 
@@ -187,6 +187,12 @@ def load_document(file, report_file=None):
                     # Convert Suggestions back to a list if it was a string
                     if "Suggestions" in row and isinstance(row["Suggestions"], str):
                         row["Suggestions"] = [s.strip() for s in row["Suggestions"].split('\n') if s.strip()]
+                    
+                    if "Final" in row:
+                        row["Final"] = "" if pd.isna(row["Final"]) else str(row["Final"])
+                    else:
+                        row["Final"] = ""
+                        
                     st.session_state.history.append(row)
                     resume_idx += 1
                     
